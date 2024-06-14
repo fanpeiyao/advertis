@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="vue@2.7.14.js"></script>
+    <link rel="stylesheet" href="index.css">
+    <title>权益套餐</title>
+</head>
+<body>
+
+    <div class='package-page' id="app">
+        <div class="package-info">
+            <div class="package-top">
+
+            </div>
+            <div class="package-center">
+                <div class='package-center-top'></div>
+                <div class='package-center-center'>
+                    <div class='package-center-name'>新开户-订单号复制订见识到了套餐</div>
+                </div>
+                <div class='package-center-bottom'>
+                    <div>
+                        <span style="color: #F3403F;font-size: 13px;font-weight: 600;">特惠价</span>
+                        <span class='package-center-amt'>150.00</span>
+                        <span style='font-weight: 600;color: #F81E17;'>元</span>
+                    </div>
+                    <img class='dashed' src="./images/dashed.png" alt=""  width="100%" height="2px">
+                    <div class='package-center-privilege'>
+                        <div class="privilege-title">
+                            <span>内含产品清单</span>
+                        </div>
+                        <ul class="privilege-list" ref="privilegeList" :style="{ height: privilegeListHeight + 'px' }">
+                            <li v-for="n in advertisInfo.privilegeName" :key="n" class="child">Item {{ n }}</li>
+                        </ul>
+                    </div>
+                    <img class='arrowDownImg' v-if='advertisInfo.privilegeName.length > 3' src="./images/arrow_down.png">
+                </div>
+            </div>
+            <div class="package-bottom">
+                <ul>
+                    <li> <span class="circleTag">1</span> 结算惠享服务方案有效期1年。</li>
+                    <li> <span class="circleTag">2</span> 结算惠享服务期限届满前，如未向工商银行提出终止产品服务申请，产品将自动延期。</li>
+                </ul>
+            </div>
+        </div>
+        <div class="package-footer">
+            <span class='tips text-orange'>点击页面下方预约开户，即可享受优惠方案，详询开户网点</span>
+            <div class="jumpBtn">预约开户</div>
+            <span class="tips">仅供参考，以实际开户时可选择的方案为准</span>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app', // Vue 实例挂载的元素
+            data: {
+                privilegeListHeight:0,
+                advertisInfo:{}
+            },
+            created(){
+                this.advertisInfo = {
+                    'privilegeName':['网银证书年服务费','开户费','财智年卡费','11','22','33','44','55']
+                }
+            },
+            mounted() {
+                this.$nextTick(() => {
+                    this.calculateHeights();
+                });
+            },
+            methods: {
+                calculateHeights() {
+                    const container = this.$refs.privilegeList;
+                    const childrenHeights = [];
+                    if(container.children.length > 0){
+                        const itemMarginBottom =
+                        this.getNumberFromPx(window.getComputedStyle(container.children[0]).marginBottom);
+                        this.privilegeListHeight = (container.children[0].offsetHeight + itemMarginBottom) * 3 - 1 ;
+                    }
+
+                },
+                getNumberFromPx(value) {
+                    // 使用正则表达式匹配数字部分
+                    const match = value.match(/^\d+/);
+                    // 如果匹配到了，返回数字，否则返回0
+                    return match ? parseInt(match[0], 10) : 0;
+                }
+            }
+        })
+    </script>
+</body>
+</html>
